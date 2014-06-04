@@ -16,3 +16,5 @@ To use this app:
 5. run "python manage.py syncdb"
 
 6. run "python manage.py runserver"
+
+7. Open 127.0.0.1:8000. Here you go!
