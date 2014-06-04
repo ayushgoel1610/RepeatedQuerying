@@ -8,4 +8,4 @@ def index(request):
 	countget = countget + 1
 	counterget.count = countget
 	counterget.save()
-	return render(request, 'index.html', {'countget': countget})
+	return render(request, 'demoapp2/index.html', {'countget': countget%3})

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript">
+
+var counterId = setInterval ( "CounterIncrement()", 5000 );
+var counter = 0;
+
+
+function CounterIncrement ( )
+{
+  
+    document.getElementById("counterdiv").innerHTML = counter;
+    counter = (counter +1);
+  
+
+  setTimeout ( 'document.getElementById("counterdiv").innerHTML = ""', 15000 );
+
+}
+
+</script>
+
+<div id="counterdiv" style="height: 1.5em; font-size: 2em; color: red;"></div>
+</body>
+</html>
