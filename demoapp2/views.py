@@ -1,11 +1,40 @@
+import urllib,urllib2,urllib3
+import BeautifulSoup
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from newapp.models import *
 
+
+def visible(element):
+    if element.parent.name in ['style', 'script', '[document]', 'head', 'title']:
+        return False
+    elif re.match('<!--.*-->', str(element)):
+        return False
+    return True
+
 def index(request):
-	counterget = Counter.objects.all()[:1].get()
-	countget = counterget.count
-	countget = countget + 1
-	counterget.count = countget
-	counterget.save()
-	return render(request, 'demoapp2/index.html', {'countget': countget%3})
+	#counterget = Counter.objects.all()[:1].get()
+	#countget = counterget.count
+	#countget = countget + 1
+	#counterget.count = countget
+	#counterget.save()
+	
+	
+	response = urllib2.urlopen('http://127.0.0.1:8888/abc')
+	htmlsrc = response.read()
+	
+	
+	#http = urllib3.PoolManager()
+	#r = http.request('GET', 'http://127.0.0.1:8888')
+	#htmlsrc_2 = r.data
+	#htmlsrc = ""
+	#data = r.read(50000)
+	#htmlsrc = htmlsrc + data
+	#r.release_conn()
+	
+	
+	#html = urllib.urlopen('http://127.0.0.1:8888/').read()
+	#soup = BeautifulSoup.BeautifulSoup(html)
+	#texts = soup.findAll(text=True)
+	#visible_texts = filter(visible, texts)
+	return render(request, 'demoapp2/index.html',{'htmlsrc': htmlsrc})
