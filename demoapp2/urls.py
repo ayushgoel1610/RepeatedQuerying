@@ -8,6 +8,11 @@ from views import *
 urlpatterns = patterns('',
     # Examples:
      url(r'^$', index, name='index'),
+     url(r'^bargraph$', bargraph, name='bargraph'),
+     url(r'^buildingwise$', buildingwise, name='buildingwise'),
+     url(r'^peoplewise$', peoplewise, name='peoplewise'),
+     url(r'^samplewebsite$', samplewebsite, name='samplewebsite'),
+     url(r'^tabledata$', tabledata, name='tabledata'),
     # url(r'^demoapp2/', include('demoapp2.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:

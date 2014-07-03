@@ -1,0 +1,50 @@
+header {
+  text-align: center;
+  background: #3fada8;
+  color: white;
+}
+a {
+  color: white;
+}
+h1 {
+  font-size: 70px;
+  margin: 0 auto;
+}
+img {
+  border: 10px solid white;
+  float: right;
+  margin: 5px;
+}
+ul {
+  padding: 10px;
+  background: black;
+}
+li {
+  display: inline;
+  padding: 0px 10px 0px 10px;
+}
+body {
+  text-align: center;
+  background: white;
+  color: black;
+  font-family: helvetica;      
+}
+p {
+  font-size: 22px;
+  margin: 0 auto;
+}
+input {
+  border: 2px solid black;
+  padding: 10px;
+  font-size: 18px;
+}
+input[type="submit"] {
+  background: #3fada8;
+  color: white;
+  border: 0;
+  border-radius: 10px;
+}
+article {
+  max-width: 1000px;
+  margin: 0 auto;
+}

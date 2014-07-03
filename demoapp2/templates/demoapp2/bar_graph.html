@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width">
+      <title>Animated Bar Chart via jQuery</title>
+      <link rel="stylesheet" href="../../static/newapp/css/common.css">
+      <link rel="stylesheet" href="../../static/newapp/css/04.css">
+      <link rel="stylesheet" type="text/css" href="../../static/newapp/css/website.css">
+   </head>
+
+   <body>
+      
+      <header>
+       <img src="../../static/newapp/img/iiitd-logo.jpg">
+       <h1>Ubicomp</h1>
+       <ul>
+         <li><a href="./SampleWebsite.html">Home</a></li>
+         <li><a href="./Building-wise.html">Building-wise</a></li>
+         <li><a href="./People-wise.html">People-wise</a></li>
+         <li><a href="#">Name Search</a></li>
+       </ul>
+      </header>
+
+      <div class="toggles">
+	     <p><a href="#" id="reset-graph-button">Reset graph</a>Hover Mouse over the bars to display information.</p>
+      </div>
+
+      <div id="wrapper">
+         <div class="chart">
+
+            <h3><center>Building &ndash; wise usage of Access Points by B.Tech, M.Tech and PhD</center></h3>
+
+            <table id="data-table" border="1" summary="AP Usage on 01-05-2014">
+               <caption>Building-wise Usage</caption>
+               <thead>
+                  <tr>
+                     <td>&nbsp;</td>
+                     <th scope="col">Academic&nbsp;Block</th>
+                     <th scope="col">Library</th>
+                     <th scope="col">Service&nbsp;Block</th>
+                     <th scope="col">Hostel</th>
+                     <th scope="col">Student&nbsp;Centre</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <th scope="row">B.Tech</th>
+                     <td>40</td>
+                     <td>60</td>
+                     <td>62</td>
+                     <td>35</td>
+                     <td>22</td>
+                  </tr>
+                  <tr>
+                     <th scope="row">M.Tech</th>
+                     <td>56</td>
+                     <td>68</td>
+                     <td>62</td>
+                     <td>51</td>
+                     <td>26</td>
+                  </tr>
+                  <tr>
+                     <th scope="row">PhD</th>
+                     <td>104</td>
+                     <td>17</td>
+                     <td>28</td>
+                     <td>47</td>
+                     <td>75</td>
+                  </tr>
+               </tbody>
+            </table>
+         </div>
+      </div>
+
+	<!-- JavaScript at the bottom for fast page loading -->
+		
+		<!-- Grab jQuery from Google -->
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+		
+		<!-- Example JavaScript -->
+		<script src="../../static/newapp/js/animation.js"></script>
+
+   </body>
+</html>
