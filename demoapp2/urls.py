@@ -8,6 +8,7 @@ from views import *
 urlpatterns = patterns('',
     # Examples:
      url(r'^$', index, name='index'),
+     url(r'^count$', countapi, name='countapi'),
      url(r'^bargraph$', bargraph, name='bargraph'),
      url(r'^buildingwise$', buildingwise, name='buildingwise'),
      url(r'^peoplewise$', peoplewise, name='peoplewise'),
