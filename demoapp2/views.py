@@ -30,46 +30,47 @@ def countapi(request):
 	for i in range(0,len(data["counts"])):
 		halfhourlybasis_new = Halfhour(device_id=data["counts"][i]["device_id"],time=d, batch=data["counts"][i]["batch"], count=data["counts"][i]["count"])
 		halfhourlybasis_new.save()
-		d1=d-timedelta(days=1)
+		d0=datetime.now()
+		d1=d0-timedelta(days=1)
 		try:
 			dailybasis_last = Dailybasis.objects.order_by("day").get(device_id=data["counts"][i]["device_id"],batch=data["counts"][i]["batch"])[-1]
 		except:
 			dailybasis_last = None
 		if  dailybasis_last is not None:
-			if  datetime.now()>d1:
+			if  dailybasis_last.day>d1:
 				dailybasis_last.count = dailybasis_last.count + data["counts"][i]["count"]
 		else:
 			dailybasis_new = Dailybasis(device_id=data["counts"][i]["device_id"],day=d, batch=data["counts"][i]["batch"], count=data["counts"][i]["count"])
 			dailybasis_new.save()
-		d2=d-timedelta(days=7)
+		d2=d0-timedelta(days=7)
 		try:
 			weeklybasis_last = Weeklybasis.objects.order_by("week").get(device_id=data["counts"][i]["device_id"],batch=data["counts"][i]["batch"])[-1]
 		except:
 			weeklybasis_last = None
 		if  weeklybasis_last is not None:
-			if  datetime.now()>d2:
+			if  weeklybasis_last.week>d2:
 				weeklybasis_last.count = weeklybasis_last.count + data["counts"][i]["count"]
 		else:
 			weeklybasis_new = Weeklybasis(device_id=data["counts"][i]["device_id"],week=d, batch=data["counts"][i]["batch"], count=data["counts"][i]["count"])
 			weeklybasis_new.save()
-		d3=d-relativedelta(months=1)
+		d3=d0-relativedelta(months=1)
 		try:
 			monthlybasis_last = Monthlybasis.objects.order_by("month").get(device_id=data["counts"][i]["device_id"],batch=data["counts"][i]["batch"])[-1]
 		except:
 			monthlybasis_last = None
 		if monthlybasis_last is not None:
-			if  datetime.now()>d3:
+			if  monthlybasis_last.month>d3:
 				monthlybasis_last.count = monthlybasis_last.count + data["counts"][i]["count"]
 		else:
 			monthlybasis_new = Monthlybasis(device_id=data["counts"][i]["device_id"],month=d, batch=data["counts"][i]["batch"], count=data["counts"][i]["count"])
 			monthlybasis_new.save()
-		d4=d-relativedelta(years=7)
+		d4=d0-relativedelta(years=7)
 		try:
 			yearlybasis_last = Yearlybasis.objects.order_by("year").get(device_id=data["counts"][i]["device_id"],batch=data["counts"][i]["batch"])[-1]
 		except:
 			yearlybasis_last = None
 		if yearlybasis_last is not None:
-			if  datetime.now()>d4:
+			if  yearlybasis_last.year>d4:
 				yearlybasis_last.count = yearlybasis_last.count + data["counts"][i]["count"]
 		else:
 			yearlybasis_new = Yearlybasis(device_id=data["counts"][i]["device_id"],year=d, batch=data["counts"][i]["batch"], count=data["counts"][i]["count"])
