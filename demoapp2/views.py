@@ -27,35 +27,39 @@ def countapi(request):
 	json_data=htmlsrc
 	data = json.loads(json_data)
 	for i in range(0,len(data["counts"])):
-		halfhourlybasis_new = Halfhour(device_id: data["counts"][i]["device_id"],time: d, batch: data["counts"][i]["batch"], count: data["counts"][i]["count"])
+		halfhourlybasis_new = Halfhour(device_id=data["counts"][i]["device_id"],time=d, batch=data["counts"][i]["batch"], count=data["counts"][i]["count"])
 		halfhourlybasis_new.save()
 		d1=d-timedelta(days=1)
-		dailybasis_last = Dailybasis.objects.get(device_id=data["counts"][i]["device_id"],batch=data["counts"][i]["batch"])[-1]
-		if  dailybasis_last.day>d1:
-			dailybasis_last.count = dailybasis_last.count + data["counts"][i]["count"]
+		dailybasis_last = Dailybasis.objects.get(device_id=data["counts"][i]["device_id"],batch=data["counts"][i]["batch"])
+		if  dailtbasis_last[-1]:
+			if  dailybasis_last[-1].day>d1:
+				dailybasis_last[-1].count = dailybasis_last[-1].count + data["counts"][i]["count"]
 		else:
-			dailybasis_new = Dailybasis(device_id: data["counts"][i]["device_id"],day: d, batch: data["counts"][i]["batch"], count: data["counts"][i]["count"])
+			dailybasis_new = Dailybasis(device_id=data["counts"][i]["device_id"],day=d, batch=data["counts"][i]["batch"], count=data["counts"][i]["count"])
 			dailybasis_new.save()
 		d2=d-timedelta(days=7)
-		weeklybasis_last = Weeklybasis.objects.get(device_id=data["counts"][i]["device_id"],batch=data["counts"][i]["batch"])[-1]
-		if  weeklybasis_last.week>d2:
-			weeklybasis_last.count = weeklybasis_last.count + data["counts"][i]["count"]
+		weeklybasis_last = Weeklybasis.objects.get(device_id=data["counts"][i]["device_id"],batch=data["counts"][i]["batch"])
+		if  weeklybasis_last[-1]:
+			if  weeklybasis_last[-1].week>d2:
+				weeklybasis_last[-1].count = weeklybasis_last[-1].count + data["counts"][i]["count"]
 		else:
-			weeklybasis_new = Weeklybasis(device_id: data["counts"][i]["device_id"],week: d, batch: data["counts"][i]["batch"], count: data["counts"][i]["count"])
+			weeklybasis_new = Weeklybasis(device_id=data["counts"][i]["device_id"],week=d, batch=data["counts"][i]["batch"], count=data["counts"][i]["count"])
 			weeklybasis_new.save()
 		d3=d-timedelta(months=1)
-		monthlybasis_last = Monthlybasis.objects.get(device_id=data["counts"][i]["device_id"],batch=data["counts"][i]["batch"])[-1]
-		if  monthlybasis_last.month>d3:
-			monthlybasis_last.count = monthlybasis_last.count + data["counts"][i]["count"]
+		monthlybasis_last = Monthlybasis.objects.get(device_id=data["counts"][i]["device_id"],batch=data["counts"][i]["batch"])
+		if monthlybasis_last[-1]:
+			if  monthlybasis_last[-1].month>d3:
+				monthlybasis_last[-1].count = monthlybasis_last[-1].count + data["counts"][i]["count"]
 		else:
-			monthlybasis_new = Monthlybasis(device_id: data["counts"][i]["device_id"],month: d, batch: data["counts"][i]["batch"], count: data["counts"][i]["count"])
+			monthlybasis_new = Monthlybasis(device_id=data["counts"][i]["device_id"],month=d, batch=data["counts"][i]["batch"], count=data["counts"][i]["count"])
 			monthlybasis_new.save()
 		d4=d-timedelta(years=7)
-		yearlybasis_last = Yearlybasis.objects.get(device_id=data["counts"][i]["device_id"],batch=data["counts"][i]["batch"])[-1]
-		if  yearlybasis_last.year>d4:
-			yearlybasis_last.count = yearlybasis_last.count + data["counts"][i]["count"]
+		yearlybasis_last = Yearlybasis.objects.get(device_id=data["counts"][i]["device_id"],batch=data["counts"][i]["batch"])
+		if yearlybasis_last[-1]:
+			if  yearlybasis_last[-1].year>d4:
+				yearlybasis_last[-1].count = yearlybasis_last[-1].count + data["counts"][i]["count"]
 		else:
-			yearlybasis_new = Yearlybasis(device_id: data["counts"][i]["device_id"],year: d, batch: data["counts"][i]["batch"], count: data["counts"][i]["count"])
+			yearlybasis_new = Yearlybasis(device_id=data["counts"][i]["device_id"],year=d, batch=data["counts"][i]["batch"], count=data["counts"][i]["count"])
 			yearlybasis_new.save()
 	return render(request, 'demoapp2/count.html',{'htmlsrc': htmlsrc})
 
