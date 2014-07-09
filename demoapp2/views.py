@@ -33,51 +33,62 @@ def countapi(request):
 		d0=datetime.now()
 		d1=d0-timedelta(days=1)
 		try:
-			dailybasis_last = Dailybasis.objects.order_by("day").filter(device_id=data["counts"][i]["device_id"],batch=data["counts"][i]["batch"])
+			dailybasis_last = Dailybasis.objects.filter(device_id=data["counts"][i]["device_id"],batch=data["counts"][i]["batch"]).order_by("day")
 			dailybasis_last_len = dailybasis_last.count()
 			print dailybasis_last
 		except:
 			print "in except block daywise"
 			dailybasis_last = None
-		if  dailybasis_last is not None:
-			if  dailybasis_last[dailybasis_last_len-1].day>d1:
-				dailybasis_last[dailybasis_last_len-1].count = dailybasis_last[dailybasis_last_len-1].count + data["counts"][i]["count"]
+		if  dailybasis_last is not None and dailybasis_last_len>0:
+			if  dailybasis_last[dailybasis_last_len-1].day.replace(tzinfo=None)>d1:
+				print str(dailybasis_last[dailybasis_last_len-1].count) +"+"+(data["counts"][i]["count"])
+				dailybasis_last[dailybasis_last_len-1].count = dailybasis_last[dailybasis_last_len-1].count + long(data["counts"][i]["count"])
+				dailybasis_last[dailybasis_last_len-1].save()
 		else:
 			dailybasis_new = Dailybasis(device_id=data["counts"][i]["device_id"],day=d, batch=data["counts"][i]["batch"], count=data["counts"][i]["count"])
 			dailybasis_new.save()
 		d2=d0-timedelta(days=7)
 		try:
-			weeklybasis_last = Weeklybasis.objects.order_by("week").get(device_id=data["counts"][i]["device_id"],batch=data["counts"][i]["batch"])[-1]
+			weeklybasis_last = Weeklybasis.objects.get(device_id=data["counts"][i]["device_id"],batch=data["counts"][i]["batch"]).order_by("week")
+			weeklybasis_last_len = weeklybasis_last.count()
+			print weeklybasis_last
 		except:
 			print "in except block weekwise"
 			weeklybasis_last = None
-		if  weeklybasis_last is not None:
-			if  weeklybasis_last.week>d2:
-				weeklybasis_last.count = weeklybasis_last.count + data["counts"][i]["count"]
+		if  weeklybasis_last is not None and weeklybasis_last_len>0:
+			if  weeklybasis_last[weeklybasis_last_len-1].week.replace(tzinfo=None)>d2:
+				weeklybasis_last[weeklybasis_last_len-1].count = weeklybasis_last[weeklybasis_last_len-1].count + long(data["counts"][i]["count"])
+				weeklybasis_last[weeklybasis_last_len-1].save()
 		else:
 			weeklybasis_new = Weeklybasis(device_id=data["counts"][i]["device_id"],week=d, batch=data["counts"][i]["batch"], count=data["counts"][i]["count"])
 			weeklybasis_new.save()
 		d3=d0-relativedelta(months=1)
 		try:
 			monthlybasis_last = Monthlybasis.objects.order_by("month").get(device_id=data["counts"][i]["device_id"],batch=data["counts"][i]["batch"])[-1]
+			monthlybasis_last_len = monthlybasis_last.count()
+			print monthlybasis_last_len
 		except:
 			print "in except block monthwise"
 			monthlybasis_last = None
-		if monthlybasis_last is not None:
-			if  monthlybasis_last.month>d3:
-				monthlybasis_last.count = monthlybasis_last.count + data["counts"][i]["count"]
+		if monthlybasis_last is not None and monthlybasis_last_len>0:
+			if  monthlybasis_last[monthlybasis_last_len-1].month.replace(tzinfo=None)>d3:
+				monthlybasis_last[monthlybasis_last_len-1].count = monthlybasis_last[monthlybasis_last_len-1].count + long(data["counts"][i]["count"])
+				monthlybasis_last[monthlybasis_last_len-1].save()
 		else:
 			monthlybasis_new = Monthlybasis(device_id=data["counts"][i]["device_id"],month=d, batch=data["counts"][i]["batch"], count=data["counts"][i]["count"])
 			monthlybasis_new.save()
 		d4=d0-relativedelta(years=7)
 		try:
 			yearlybasis_last = Yearlybasis.objects.order_by("year").get(device_id=data["counts"][i]["device_id"],batch=data["counts"][i]["batch"])[-1]
+			yearlybasis_last_len = yearlybasis_last.count()
+			print yearlybasis_last_len
 		except:
 			print "in except block yearwise"
 			yearlybasis_last = None
-		if yearlybasis_last is not None:
-			if  yearlybasis_last.year>d4:
-				yearlybasis_last.count = yearlybasis_last.count + data["counts"][i]["count"]
+		if yearlybasis_last is not None and yearlybasis_last_len>0:
+			if  yearlybasis_last[yearlybasis_last_len-1].year.replace(tzinfo=None)>d4:
+				yearlybasis_last[yearlybasis_last_len-1].count = yearlybasis_last[yearlybasis_last_len-1].count + long(data["counts"][i]["count"])
+				yearlybasis_last[yearlybasis_last_len-1].save()
 		else:
 			yearlybasis_new = Yearlybasis(device_id=data["counts"][i]["device_id"],year=d, batch=data["counts"][i]["batch"], count=data["counts"][i]["count"])
 			yearlybasis_new.save()
