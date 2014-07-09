@@ -33,12 +33,15 @@ def countapi(request):
 		d0=datetime.now()
 		d1=d0-timedelta(days=1)
 		try:
-			dailybasis_last = Dailybasis.objects.order_by("day").get(device_id=data["counts"][i]["device_id"],batch=data["counts"][i]["batch"])[-1]
+			dailybasis_last = Dailybasis.objects.order_by("day").filter(device_id=data["counts"][i]["device_id"],batch=data["counts"][i]["batch"])
+			dailybasis_last_len = dailybasis_last.count()
+			print dailybasis_last
 		except:
+			print "in except block daywise"
 			dailybasis_last = None
 		if  dailybasis_last is not None:
-			if  dailybasis_last.day>d1:
-				dailybasis_last.count = dailybasis_last.count + data["counts"][i]["count"]
+			if  dailybasis_last[dailybasis_last_len-1].day>d1:
+				dailybasis_last[dailybasis_last_len-1].count = dailybasis_last[dailybasis_last_len-1].count + data["counts"][i]["count"]
 		else:
 			dailybasis_new = Dailybasis(device_id=data["counts"][i]["device_id"],day=d, batch=data["counts"][i]["batch"], count=data["counts"][i]["count"])
 			dailybasis_new.save()
@@ -46,6 +49,7 @@ def countapi(request):
 		try:
 			weeklybasis_last = Weeklybasis.objects.order_by("week").get(device_id=data["counts"][i]["device_id"],batch=data["counts"][i]["batch"])[-1]
 		except:
+			print "in except block weekwise"
 			weeklybasis_last = None
 		if  weeklybasis_last is not None:
 			if  weeklybasis_last.week>d2:
@@ -57,6 +61,7 @@ def countapi(request):
 		try:
 			monthlybasis_last = Monthlybasis.objects.order_by("month").get(device_id=data["counts"][i]["device_id"],batch=data["counts"][i]["batch"])[-1]
 		except:
+			print "in except block monthwise"
 			monthlybasis_last = None
 		if monthlybasis_last is not None:
 			if  monthlybasis_last.month>d3:
@@ -68,6 +73,7 @@ def countapi(request):
 		try:
 			yearlybasis_last = Yearlybasis.objects.order_by("year").get(device_id=data["counts"][i]["device_id"],batch=data["counts"][i]["batch"])[-1]
 		except:
+			print "in except block yearwise"
 			yearlybasis_last = None
 		if yearlybasis_last is not None:
 			if  yearlybasis_last.year>d4:
