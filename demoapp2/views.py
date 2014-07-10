@@ -105,31 +105,38 @@ def visible(element):
 
 def countapi(request):
 	d=datetime.now()-timedelta(minutes=30)
-	fromtime=d.strftime("%Y-%m-%d-%H:%M:%S")
-	totime=strftime("%Y-%m-%d-%H:%M:%S")
+	d0=datetime.now()
+	# d_half=d0-relativedelta(hours=-5,minutes=(d0.minute%30),seconds=d0.second,microseconds=d0.microsecond)
+	from_time=d0-relativedelta(hours=-10,minutes=(d0.minute%30),seconds=d0.second,microseconds=d0.microsecond)
+	fromtime=from_time.strftime("%Y-%m-%d-%H:%M:%S")
+	to_time=from_time-relativedelta(minutes=-30)
+	totime=to_time.strftime("%Y-%m-%d-%H:%M:%S")
 	url = "https://192.168.1.40:9119/count?from="
 	url = url+fromtime+"&to="
 	url = url+totime+"&format=yyyy-mm-dd-hh24:mi:ss&token=98a4bafbb35b3527c524ac5d73e9ff8e5e56c6caed488b259682feb7d0a1d192"
 	response = urllib2.urlopen(url)
+	print url
 	htmlsrc = response.read()
 	json_data=htmlsrc
 	data = json.loads(json_data)
 	for i in range(0,len(data["counts"])):
-		halfhourlybasis_new = Halfhour(device_id=data["counts"][i]["device_id"],time=d, batch=data["counts"][i]["batch"], count=data["counts"][i]["count"])
-		halfhourlybasis_new.save()
 		d0=datetime.now()
-		d1=d0-timedelta(days=1)
-		today = d0-relativedelta(hours=d0.hour,minutes=d0.minute,seconds=d0.second,microseconds=d0.microsecond)
-		print today
+		d_half=d0-relativedelta(hours=-5,minutes=(d0.minute%30),seconds=d0.second,microseconds=d0.microsecond)
+		halfhourlybasis_new = Halfhour(device_id=data["counts"][i]["device_id"],time=d_half, batch=data["counts"][i]["batch"], count=data["counts"][i]["count"])
+		halfhourlybasis_new.save()
+		
+		# d1=d0-timedelta(days=1)
+		today = d_half-relativedelta(hours=d_half.hour+5,minutes=d_half.minute,seconds=d_half.second,microseconds=d_half.microsecond)
+		# print today
 		try:
 			dailybasis_last = Dailybasis.objects.get(device_id=data["counts"][i]["device_id"],batch=data["counts"][i]["batch"],day=today)
-			print dailybasis_last
+			# print dailybasis_last
 		except:
-			print "in except block daywise"
+			# print "in except block daywise"
 			dailybasis_last = None
 		if  dailybasis_last is not None:
 			if  dailybasis_last.day.replace(tzinfo=None)<d0:
-				print str(dailybasis_last.count) +"+"+(data["counts"][i]["count"])
+				# print str(dailybasis_last.count) +"+"+(data["counts"][i]["count"])
 				# dailybasis_last_obj = dailybasis_last.latest("day")
 				# dailybasis_last_obj = dailybasis_last[0]
 				count1=dailybasis_last.count
@@ -163,15 +170,15 @@ def countapi(request):
 		# else:
 		# 	weeklybasis_new = Weeklybasis(device_id=data["counts"][i]["device_id"],week=d, batch=data["counts"][i]["batch"], count=data["counts"][i]["count"])
 		# 	weeklybasis_new.save()
-		d3=d0-relativedelta(days=d0.day,hours=d0.hour,minutes=d0.minute,seconds=d0.second,microseconds=d0.microsecond)
+		d3=d_half-relativedelta(days=d_half.day,hours=d_half.hour+5,minutes=d_half.minute,seconds=d_half.second,microseconds=d_half.microsecond)
 		print d3
 		try:
 			monthlybasis_last = Monthlybasis.objects.get(device_id=data["counts"][i]["device_id"],batch=data["counts"][i]["batch"],month=d3)
-			print monthlybasis_last
+			# print monthlybasis_last
 			# monthlybasis_last_len = monthlybasis_last.count()
 			# print monthlybasis_last_len
 		except:
-			print "in except block monthwise"
+			# print "in except block monthwise"
 			monthlybasis_last = None
 		if monthlybasis_last is not None:
 			if  monthlybasis_last.month.replace(tzinfo=None)<d0:
@@ -180,7 +187,7 @@ def countapi(request):
 		else:
 			monthlybasis_new = Monthlybasis(device_id=data["counts"][i]["device_id"],month=d3, batch=data["counts"][i]["batch"], count=data["counts"][i]["count"])
 			monthlybasis_new.save()
-		d4=d0-relativedelta(months=d0.month,days=d0.day,hours=d0.hour,minutes=d0.minute,seconds=d0.second,microseconds=d0.microsecond)
+		d4=d_half-relativedelta(months=d_half.month,days=d_half.day,hours=d_half.hour+5,minutes=d_half.minute,seconds=d_half.second,microseconds=d_half.microsecond)
 		try:
 			yearlybasis_last = Yearlybasis.objects.get(device_id=data["counts"][i]["device_id"],batch=data["counts"][i]["batch"],year=d4)
 			# yearlybasis_last_len = yearlybasis_last.count()
