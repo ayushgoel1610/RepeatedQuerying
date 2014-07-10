@@ -16,6 +16,93 @@ def visible(element):
         return False
     return True
 
+# def countapi(request):
+# 	d=datetime.now()-timedelta(minutes=30)
+# 	fromtime=d.strftime("%Y-%m-%d-%H:%M:%S")
+# 	totime=strftime("%Y-%m-%d-%H:%M:%S")
+# 	url = "https://192.168.1.40:9119/count?from="
+# 	url = url+fromtime+"&to="
+# 	url = url+totime+"&format=yyyy-mm-dd-hh24:mi:ss&token=98a4bafbb35b3527c524ac5d73e9ff8e5e56c6caed488b259682feb7d0a1d192"
+# 	response = urllib2.urlopen(url)
+# 	htmlsrc = response.read()
+# 	json_data=htmlsrc
+# 	data = json.loads(json_data)
+# 	for i in range(0,len(data["counts"])):
+# 		halfhourlybasis_new = Halfhour(device_id=data["counts"][i]["device_id"],time=d, batch=data["counts"][i]["batch"], count=data["counts"][i]["count"])
+# 		halfhourlybasis_new.save()
+# 		d0=datetime.now()
+# 		d1=d0-timedelta(days=1)
+# 		try:
+# 			dailybasis_last = Dailybasis.objects.filter(device_id=data["counts"][i]["device_id"],batch=data["counts"][i]["batch"]).order_by("day").reverse()
+# 			dailybasis_last_len = dailybasis_last.count()
+# 			print dailybasis_last
+# 		except:
+# 			print "in except block daywise"
+# 			dailybasis_last = None
+# 		if  dailybasis_last is not None and dailybasis_last_len>0:
+# 			if  dailybasis_last[0].day.replace(tzinfo=None)>d1:
+# 				print str(dailybasis_last[0].count) +"+"+(data["counts"][i]["count"])
+# 				# dailybasis_last_obj = dailybasis_last.latest("day")
+# 				dailybasis_last_obj = dailybasis_last[0]
+# 				count1=dailybasis_last_obj.count
+# 				dailybasis_last_obj.update(count=count1+long(data["counts"][i]["count"]))
+# 				# dailybasis_last_obj.count = dailybasis_last_obj.count + long(data["counts"][i]["count"])
+# 				# if dailybasis_last_obj.save()
+# 				# 	print "true"
+# 				# else
+# 				# 	print "why :/"
+# 				# print dailybasis_last[dailybasis_last_len-1]
+# 		else:
+# 			dailybasis_new = Dailybasis(device_id=data["counts"][i]["device_id"],day=d, batch=data["counts"][i]["batch"], count=data["counts"][i]["count"])
+# 			dailybasis_new.save()
+
+# 		d2=d0-timedelta(days=7)
+# 		try:
+# 			weeklybasis_last = Weeklybasis.objects.filter(device_id=data["counts"][i]["device_id"],batch=data["counts"][i]["batch"]).order_by("week")
+# 			weeklybasis_last_len = weeklybasis_last.count()
+# 			print weeklybasis_last
+# 		except:
+# 			print "in except block weekwise"
+# 			weeklybasis_last = None
+# 		if  weeklybasis_last is not None and weeklybasis_last_len>0:
+# 			if  weeklybasis_last[weeklybasis_last_len-1].week.replace(tzinfo=None)>d2:
+# 				weeklybasis_last[weeklybasis_last_len-1].count = weeklybasis_last[weeklybasis_last_len-1].count + long(data["counts"][i]["count"])
+# 				weeklybasis_last[weeklybasis_last_len-1].save()
+# 		else:
+# 			weeklybasis_new = Weeklybasis(device_id=data["counts"][i]["device_id"],week=d, batch=data["counts"][i]["batch"], count=data["counts"][i]["count"])
+# 			weeklybasis_new.save()
+# 		d3=d0-relativedelta(months=1)
+# 		try:
+# 			monthlybasis_last = Monthlybasis.objects.filter(device_id=data["counts"][i]["device_id"],batch=data["counts"][i]["batch"]).order_by("month")
+# 			monthlybasis_last_len = monthlybasis_last.count()
+# 			print monthlybasis_last_len
+# 		except:
+# 			print "in except block monthwise"
+# 			monthlybasis_last = None
+# 		if monthlybasis_last is not None and monthlybasis_last_len>0:
+# 			if  monthlybasis_last[monthlybasis_last_len-1].month.replace(tzinfo=None)>d3:
+# 				monthlybasis_last[monthlybasis_last_len-1].count = monthlybasis_last[monthlybasis_last_len-1].count + long(data["counts"][i]["count"])
+# 				monthlybasis_last[monthlybasis_last_len-1].save()
+# 		else:
+# 			monthlybasis_new = Monthlybasis(device_id=data["counts"][i]["device_id"],month=d, batch=data["counts"][i]["batch"], count=data["counts"][i]["count"])
+# 			monthlybasis_new.save()
+# 		d4=d0-relativedelta(years=7)
+# 		try:
+# 			yearlybasis_last = Yearlybasis.objects.filter(device_id=data["counts"][i]["device_id"],batch=data["counts"][i]["batch"]).order_by("year")
+# 			yearlybasis_last_len = yearlybasis_last.count()
+# 			print yearlybasis_last_len
+# 		except:
+# 			print "in except block yearwise"
+# 			yearlybasis_last = None
+# 		if yearlybasis_last is not None and yearlybasis_last_len>0:
+# 			if  yearlybasis_last[yearlybasis_last_len-1].year.replace(tzinfo=None)>d4:
+# 				yearlybasis_last[yearlybasis_last_len-1].count = yearlybasis_last[yearlybasis_last_len-1].count + long(data["counts"][i]["count"])
+# 				yearlybasis_last[yearlybasis_last_len-1].save()
+# 		else:
+# 			yearlybasis_new = Yearlybasis(device_id=data["counts"][i]["device_id"],year=d, batch=data["counts"][i]["batch"], count=data["counts"][i]["count"])
+# 			yearlybasis_new.save()
+# 	return render(request, 'demoapp2/count.html',{'htmlsrc': htmlsrc})
+
 def countapi(request):
 	d=datetime.now()-timedelta(minutes=30)
 	fromtime=d.strftime("%Y-%m-%d-%H:%M:%S")
@@ -32,68 +119,83 @@ def countapi(request):
 		halfhourlybasis_new.save()
 		d0=datetime.now()
 		d1=d0-timedelta(days=1)
+		today = d0-relativedelta(hours=d0.hour,minutes=d0.minute,seconds=d0.second,microseconds=d0.microsecond)
+		print today
 		try:
-			dailybasis_last = Dailybasis.objects.filter(device_id=data["counts"][i]["device_id"],batch=data["counts"][i]["batch"]).order_by("day")
-			dailybasis_last_len = dailybasis_last.count()
+			dailybasis_last = Dailybasis.objects.get(device_id=data["counts"][i]["device_id"],batch=data["counts"][i]["batch"],day=today)
 			print dailybasis_last
 		except:
 			print "in except block daywise"
 			dailybasis_last = None
-		if  dailybasis_last is not None and dailybasis_last_len>0:
-			if  dailybasis_last[dailybasis_last_len-1].day.replace(tzinfo=None)>d1:
-				print str(dailybasis_last[dailybasis_last_len-1].count) +"+"+(data["counts"][i]["count"])
-				dailybasis_last[dailybasis_last_len-1].count = dailybasis_last[dailybasis_last_len-1].count + long(data["counts"][i]["count"])
-				dailybasis_last[dailybasis_last_len-1].save()
+		if  dailybasis_last is not None:
+			if  dailybasis_last.day.replace(tzinfo=None)<d0:
+				print str(dailybasis_last.count) +"+"+(data["counts"][i]["count"])
+				# dailybasis_last_obj = dailybasis_last.latest("day")
+				# dailybasis_last_obj = dailybasis_last[0]
+				count1=dailybasis_last.count
+				dailybasis_last.count=count1+long(data["counts"][i]["count"])
+				if dailybasis_last.save(update_fields=["count"]):
+					print "true!"
+				else:
+					print "false!"
+				# dailybasis_last_obj.count = dailybasis_last_obj.count + long(data["counts"][i]["count"])
+				# if dailybasis_last_obj.save()
+				# 	print "true"
+				# else
+				# 	print "why :/"
+				# print dailybasis_last[dailybasis_last_len-1]
 		else:
-			dailybasis_new = Dailybasis(device_id=data["counts"][i]["device_id"],day=d, batch=data["counts"][i]["batch"], count=data["counts"][i]["count"])
+			dailybasis_new = Dailybasis(device_id=data["counts"][i]["device_id"],day=today, batch=data["counts"][i]["batch"], count=data["counts"][i]["count"])
 			dailybasis_new.save()
-		d2=d0-timedelta(days=7)
+
+		# d2=d0-timedelta(days=7)
+		# try:
+		# 	weeklybasis_last = Weeklybasis.objects.filter(device_id=data["counts"][i]["device_id"],batch=data["counts"][i]["batch"]).order_by("week")
+		# 	weeklybasis_last_len = weeklybasis_last.count()
+		# 	print weeklybasis_last
+		# except:
+		# 	print "in except block weekwise"
+		# 	weeklybasis_last = None
+		# if  weeklybasis_last is not None and weeklybasis_last_len>0:
+		# 	if  weeklybasis_last[weeklybasis_last_len-1].week.replace(tzinfo=None)>d2:
+		# 		weeklybasis_last[weeklybasis_last_len-1].count = weeklybasis_last[weeklybasis_last_len-1].count + long(data["counts"][i]["count"])
+		# 		weeklybasis_last[weeklybasis_last_len-1].save()
+		# else:
+		# 	weeklybasis_new = Weeklybasis(device_id=data["counts"][i]["device_id"],week=d, batch=data["counts"][i]["batch"], count=data["counts"][i]["count"])
+		# 	weeklybasis_new.save()
+		d3=d0-relativedelta(days=d0.day,hours=d0.hour,minutes=d0.minute,seconds=d0.second,microseconds=d0.microsecond)
+		print d3
 		try:
-			weeklybasis_last = Weeklybasis.objects.get(device_id=data["counts"][i]["device_id"],batch=data["counts"][i]["batch"]).order_by("week")
-			weeklybasis_last_len = weeklybasis_last.count()
-			print weeklybasis_last
-		except:
-			print "in except block weekwise"
-			weeklybasis_last = None
-		if  weeklybasis_last is not None and weeklybasis_last_len>0:
-			if  weeklybasis_last[weeklybasis_last_len-1].week.replace(tzinfo=None)>d2:
-				weeklybasis_last[weeklybasis_last_len-1].count = weeklybasis_last[weeklybasis_last_len-1].count + long(data["counts"][i]["count"])
-				weeklybasis_last[weeklybasis_last_len-1].save()
-		else:
-			weeklybasis_new = Weeklybasis(device_id=data["counts"][i]["device_id"],week=d, batch=data["counts"][i]["batch"], count=data["counts"][i]["count"])
-			weeklybasis_new.save()
-		d3=d0-relativedelta(months=1)
-		try:
-			monthlybasis_last = Monthlybasis.objects.order_by("month").get(device_id=data["counts"][i]["device_id"],batch=data["counts"][i]["batch"])[-1]
-			monthlybasis_last_len = monthlybasis_last.count()
-			print monthlybasis_last_len
+			monthlybasis_last = Monthlybasis.objects.get(device_id=data["counts"][i]["device_id"],batch=data["counts"][i]["batch"],month=d3)
+			print monthlybasis_last
+			# monthlybasis_last_len = monthlybasis_last.count()
+			# print monthlybasis_last_len
 		except:
 			print "in except block monthwise"
 			monthlybasis_last = None
-		if monthlybasis_last is not None and monthlybasis_last_len>0:
-			if  monthlybasis_last[monthlybasis_last_len-1].month.replace(tzinfo=None)>d3:
-				monthlybasis_last[monthlybasis_last_len-1].count = monthlybasis_last[monthlybasis_last_len-1].count + long(data["counts"][i]["count"])
-				monthlybasis_last[monthlybasis_last_len-1].save()
+		if monthlybasis_last is not None:
+			if  monthlybasis_last.month.replace(tzinfo=None)<d0:
+				monthlybasis_last.count = monthlybasis_last.count + long(data["counts"][i]["count"])
+				monthlybasis_last.save()
 		else:
-			monthlybasis_new = Monthlybasis(device_id=data["counts"][i]["device_id"],month=d, batch=data["counts"][i]["batch"], count=data["counts"][i]["count"])
+			monthlybasis_new = Monthlybasis(device_id=data["counts"][i]["device_id"],month=d3, batch=data["counts"][i]["batch"], count=data["counts"][i]["count"])
 			monthlybasis_new.save()
-		d4=d0-relativedelta(years=7)
+		d4=d0-relativedelta(months=d0.month,days=d0.day,hours=d0.hour,minutes=d0.minute,seconds=d0.second,microseconds=d0.microsecond)
 		try:
-			yearlybasis_last = Yearlybasis.objects.order_by("year").get(device_id=data["counts"][i]["device_id"],batch=data["counts"][i]["batch"])[-1]
-			yearlybasis_last_len = yearlybasis_last.count()
-			print yearlybasis_last_len
+			yearlybasis_last = Yearlybasis.objects.get(device_id=data["counts"][i]["device_id"],batch=data["counts"][i]["batch"],year=d4)
+			# yearlybasis_last_len = yearlybasis_last.count()
+			# print yearlybasis_last_len
 		except:
 			print "in except block yearwise"
 			yearlybasis_last = None
-		if yearlybasis_last is not None and yearlybasis_last_len>0:
-			if  yearlybasis_last[yearlybasis_last_len-1].year.replace(tzinfo=None)>d4:
-				yearlybasis_last[yearlybasis_last_len-1].count = yearlybasis_last[yearlybasis_last_len-1].count + long(data["counts"][i]["count"])
-				yearlybasis_last[yearlybasis_last_len-1].save()
+		if yearlybasis_last is not None:
+			if  yearlybasis_last.year.replace(tzinfo=None)<d0:
+				yearlybasis_last.count = yearlybasis_last.count + long(data["counts"][i]["count"])
+				yearlybasis_last.save()
 		else:
-			yearlybasis_new = Yearlybasis(device_id=data["counts"][i]["device_id"],year=d, batch=data["counts"][i]["batch"], count=data["counts"][i]["count"])
+			yearlybasis_new = Yearlybasis(device_id=data["counts"][i]["device_id"],year=d4, batch=data["counts"][i]["batch"], count=data["counts"][i]["count"])
 			yearlybasis_new.save()
 	return render(request, 'demoapp2/count.html',{'htmlsrc': htmlsrc})
-
 
 def index(request):
 	#counterget = Counter.objects.all()[:1].get()
