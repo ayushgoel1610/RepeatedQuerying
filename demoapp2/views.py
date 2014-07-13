@@ -7,6 +7,7 @@ from newapp.models import *
 from time import strftime
 from datetime import *
 from dateutil.relativedelta import relativedelta
+from django.http import HttpResponse
 htmlsrc=""
 time="2015-07-03-17:20:10"
 def visible(element):
@@ -204,7 +205,7 @@ def countapi(request):
 			yearlybasis_new.save()
 	return render(request, 'demoapp2/count.html',{'htmlsrc': htmlsrc})
 
-starttime="2014-02-15-23:00:00"
+starttime="2014-02-15 23:00:00"
 def countapi_old():
 	global starttime
 	d=datetime.now()-timedelta(minutes=30)
@@ -314,8 +315,220 @@ def fetch_old():
 	while starttime<datetime.now():
 		countapi_old()
 
-def respondtoquery():
+def halfhour_single(request,param):
+	# d contains the string for date in the specified format
+	d=param
+	time1=datetime.strptime(d,"%Y-%m-%d %H:%M:%S")-relativedelta(hours=5)
+	objects= Halfhour.objects.filter(time=time1)
+	list=[]
+	for o in objects:
+		dic={}
+		dic["count"]=o.count
+		dic["batch"]=o.batch
+		dic["device_id"]=o.device_id
+		list.append(dic)
+	keys = [ 'count', 'batch','device_id']
+	# f = open('buildingwise.csv', 'wb')
+	# dict_writer = csv.DictWriter(f, keys)
+	# dict_writer.writer.writerow(keys)
+	# dict_writer.writerows(data["log entries"])
 	
+	response = HttpResponse(content_type='text/csv')
+	response['Content-Disposition'] = 'filename="buildingwise.csv"'
+	dict_writer = csv.DictWriter(response, keys)
+	dict_writer.writer.writerow(keys)
+	dict_writer.writerows(list)
+	# writer = csv.writer(response)
+ #    writer.writerow(['device_id', 'batch', 'count'])
+ # 	  for i in range (0,len(lis)):
+ #    		writer.writerow([list[i]["device_id"], list[i]["batch"], list[i]["count"]])
+	return response
+
+def halfhour_day(request,param):
+	# d1 contains the string for date in the specified format
+	d1=param
+	d=datetime.strptime(d1,"%Y-%m-%d %H:%M:%S")
+	time1=d-relativedelta(hours=d.hour,minutes=d.minute,seconds=d.second,microseconds=d.microsecond)
+	nextdaytime=d-relativedelta(days=-1,hours=d.hour,minutes=d.minute,seconds=d.second,microseconds=d.microsecond)
+	d_iter=time1
+	list=[]
+	while d_iter.day == d.day:
+		objects= Halfhour.objects.filter(time=d_iter)
+		
+		for o in objects:
+			dic={}
+			# dic["time"]=o.time
+			dic["count"]=o.count
+			dic["batch"]=o.batch
+			dic["device_id"]=o.device_id
+			list.append(dic)
+		d_iter = d_iter +relativedelta(minutes=30)
+	keys = ['device_id', 'batch', 'count']
+	# f = open('buildingwise.csv', 'wb')
+	# dict_writer = csv.DictWriter(f, keys)
+	# dict_writer.writer.writerow(keys)
+	# dict_writer.writerows(data["log entries"])
+	
+	response1 = HttpResponse(content_type='text/csv')
+	response1['Content-Disposition'] = 'attachment; filename="halfhour_day.csv"'
+	dict_writer = csv.DictWriter(response1, keys)
+	dict_writer.writer.writerow(keys)
+	dict_writer.writerows(list)
+	# writer = csv.writer(response)
+ #    writer.writerow(['First row', 'Foo', 'Bar', 'Baz'])
+ #    writer.writerow(['Second row', 'A', 'B', 'C', '"Testing"', "Here's a quote"])
+	return response1
+
+
+def day_single(request,param):
+	# d1 contains the string for date in the specified format
+	d1=param
+	d=datetime.strptime(d1,"%Y-%m-%d %H:%M:%S")
+	time1=d-relativedelta(hours=5+d.hour,minutes=d.minute,seconds=d.second,microseconds=d.microsecond)
+	nextdaytime=d-relativedelta(days=-1,hours=d.hour,minutes=d.minute,seconds=d.second,microseconds=d.microsecond)
+	objects= Dailybasis.objects.filter(day=time1)
+	list=[]
+	for o in objects:
+		dic={}
+		# dic["time"]=o.day
+		dic["count"]=o.count
+		dic["batch"]=o.batch
+		dic["device_id"]=o.device_id
+		list.append(dic)
+	keys = ['device_id', 'batch', 'count']
+	# f = open('buildingwise.csv', 'wb')
+	# dict_writer = csv.DictWriter(f, keys)
+	# dict_writer.writer.writerow(keys)
+	# dict_writer.writerows(data["log entries"])
+	
+	response = HttpResponse(content_type='text/csv')
+	response['Content-Disposition'] = 'attachment; filename="day_single.csv"'
+	dict_writer = csv.DictWriter(response, keys)
+	dict_writer.writer.writerow(keys)
+	dict_writer.writerows(list)
+	# writer = csv.writer(response)
+ #    writer.writerow(['First row', 'Foo', 'Bar', 'Baz'])
+ #    writer.writerow(['Second row', 'A', 'B', 'C', '"Testing"', "Here's a quote"])
+	return response
+
+def day_month(request,param):
+	# d1 contains the string for date in the specified format
+	d1=param
+	d=datetime.strptime(d1,"%Y-%m-%d %H:%M:%S")
+	time1=d-relativedelta(hours=5+d.hour,minutes=d.minute,seconds=d.second,microseconds=d.microsecond)
+	nextdaytime=d-relativedelta(days=-1,hours=d.hour,minutes=d.minute,seconds=d.second,microseconds=d.microsecond)
+	d_iter=time1
+	list=[]
+	while d_iter.month==d.month:
+
+		objects= Dailybasis.objects.filter(day=d_iter)
+		
+		for o in objects:
+			dic={}
+			# dic["time"]=o.day
+			dic["count"]=o.count
+			dic["batch"]=o.batch
+			dic["device_id"]=o.device_id
+			list.append(dic)
+		d_iter=d_iter+relativedelta(days=1)
+	keys = ['device_id', 'batch', 'count']
+	# f = open('buildingwise.csv', 'wb')
+	# dict_writer = csv.DictWriter(f, keys)
+	# dict_writer.writer.writerow(keys)
+	# dict_writer.writerows(data["log entries"])
+	
+	response = HttpResponse(content_type='text/csv')
+	response['Content-Disposition'] = 'attachment; filename="day_month.csv"'
+	dict_writer = csv.DictWriter(response, keys)
+	dict_writer.writer.writerow(keys)
+	dict_writer.writerows(list)
+	# writer = csv.writer(response)
+ #    writer.writerow(['First row', 'Foo', 'Bar', 'Baz'])
+ #    writer.writerow(['Second row', 'A', 'B', 'C', '"Testing"', "Here's a quote"])
+	return response
+
+
+def month_single(request,param):
+	# d1 contains the string for date in the specified format
+	d1=param
+	d=datetime.strptime(d1,"%Y-%m-%d %H:%M:%S")
+	time1=d-relativedelta(days=d.day,hours=5+d.hour,minutes=d.minute,seconds=d.second,microseconds=d.microsecond)
+	# nextdaytime=d-relativedelta(days=-1,hours=d.hour,minutes=d.minute,seconds=d.second,microseconds=d.microsecond)
+	# d_iter=time1
+	list=[]
+
+	objects= Monthlybasis.objects.filter(month=time1)
+	
+	for o in objects:
+		dic={}
+		# dic["time"]=o.month
+		dic["count"]=o.count
+		dic["batch"]=o.batch
+		dic["device_id"]=o.device_id
+		list.append(dic)
+	keys = ['device_id', 'batch', 'count']
+	# f = open('buildingwise.csv', 'wb')
+	# dict_writer = csv.DictWriter(f, keys)
+	# dict_writer.writer.writerow(keys)
+	# dict_writer.writerows(data["log entries"])
+	
+	response = HttpResponse(content_type='text/csv')
+	response['Content-Disposition'] = 'attachment; filename="month_single.csv"'
+	dict_writer = csv.DictWriter(response, keys)
+	dict_writer.writer.writerow(keys)
+	dict_writer.writerows(list)
+	# writer = csv.writer(response)
+ #    writer.writerow(['First row', 'Foo', 'Bar', 'Baz'])
+ #    writer.writerow(['Second row', 'A', 'B', 'C', '"Testing"', "Here's a quote"])
+	return response
+
+def month_year(request,param):
+	# d1 contains the string for date in the specified format
+	d1=param
+	d=datetime.strptime(d1,"%Y-%m-%d %H:%M:%S")
+	time1=d-relativedelta(months=d.month-1,days=d.day-1,hours=d.hour+5,minutes=d.minute,seconds=d.second,microseconds=d.microsecond)
+	yearaftertime=d+relativedelta(years=1)
+	d_iter=time1
+	print "d_iter:"
+	print d_iter
+	print "d:"
+	print d
+	list=[]
+	count=0
+	while d_iter.year!=yearaftertime.year:
+
+		objects= Monthlybasis.objects.filter(month=d_iter)
+		count+=1
+		for o in objects:
+			dic={}
+			# dic["time"]=o.month
+			dic["count"]=o.count
+			dic["batch"]=o.batch
+			dic["device_id"]=o.device_id
+			list.append(dic)
+		d_iter = d_iter +relativedelta(months=1)
+		if(d_iter.month==3):
+			d_iter = d_iter + relativedelta(days=1)
+	keys = ['device_id', 'batch', 'count']
+	# f = open('buildingwise.csv', 'wb')
+	# dict_writer = csv.DictWriter(f, keys)
+	# dict_writer.writer.writerow(keys)
+	# dict_writer.writerows(data["log entries"])
+	
+	response = HttpResponse(content_type='text/csv')
+	response['Content-Disposition'] = 'attachment; filename="month_year.csv"'
+	dict_writer = csv.DictWriter(response, keys)
+	dict_writer.writer.writerow(keys)
+	dict_writer.writerows(list)
+	# writer = csv.writer(response)
+ #    writer.writerow(['First row', 'Foo', 'Bar', 'Baz'])
+ #    writer.writerow(['Second row', 'A', 'B', 'C', '"Testing"', "Here's a quote"])
+	return response
+
+def try1(request,change):
+	print change
+	print type(str(change))
+	return HttpResponse(str(change))
 
 def index(request):
 	#counterget = Counter.objects.all()[:1].get()
