@@ -352,6 +352,7 @@ def halfhour_single(request,param):
         dic["count"]=o.count
         dic["batch"]=o.batch
         dic["device_id"]=o.device_id
+        dic["time"]=o.time
         list.append(dic)
     keys = [ 'count', 'batch','device_id']
     # f = open('buildingwise.csv', 'wb')
@@ -383,7 +384,7 @@ def halfhour_day(request,param):
 
         for o in objects:
             dic={}
-            # dic["time"]=o.time
+            dic["time"]=o.time
             dic["count"]=o.count
             dic["batch"]=o.batch
             dic["device_id"]=o.device_id
@@ -416,7 +417,7 @@ def day_single(request,param):
     list=[]
     for o in objects:
         dic={}
-        # dic["time"]=o.day
+        dic["time"]=o.day
         dic["count"]=o.count
         dic["batch"]=o.batch
         dic["device_id"]=o.device_id
@@ -451,7 +452,7 @@ def day_month(request,param):
 
         for o in objects:
             dic={}
-            # dic["time"]=o.day
+            dic["time"]=o.day
             dic["count"]=o.count
             dic["batch"]=o.batch
             dic["device_id"]=o.device_id
@@ -487,7 +488,7 @@ def month_single(request,param):
 
     for o in objects:
         dic={}
-        # dic["time"]=o.month
+        dic["time"]=o.month
         dic["count"]=o.count
         dic["batch"]=o.batch
         dic["device_id"]=o.device_id
@@ -527,7 +528,7 @@ def month_year(request,param):
         count+=1
         for o in objects:
             dic={}
-            # dic["time"]=o.month
+            dic["time"]=o.month
             dic["count"]=o.count
             dic["batch"]=o.batch
             dic["device_id"]=o.device_id
