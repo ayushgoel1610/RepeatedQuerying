@@ -341,6 +341,82 @@ def fetch_old():
     while starttime<datetime.now():
         countapi_old()
 
+# def halfhour_particularday(request,time1,time2,month):
+#     d1=time1
+#     d2=time2
+#     date1=datetime.strptime(d1,"%Y-%m-%d %H:%M:%S")
+#     days1=date1.day
+#     month_diff1=date1.month-month
+#     date2=datetime.strptime(d2,"%Y-%m-%d %H:%M:%S")
+#     days2=date2.day
+#     month_diff2=date2.month-month
+#     date1=date1-relativedelta(months=month_diff1,hours=5)
+#     date2=date2-relativedelta(months=month_diff2,hours=5)
+#     startofmonth
+    
+def halfhour_particularday(request,day,month,year):
+    date=datetime(year=year,month=month,day=1)
+    date1=date-relativedelta(hours=5)
+    list=[]
+    # while date1.month != month+1:
+    # objects= Halfhour.objects.filter(time=date1)
+    while date1.strftime("%A") is not day:
+        date1=datetime(year=date1.year,month=date1.month,day=date1.day+1,hour=date1.hour,minute=date1.minute,second=date1.second,microsecond=date1.microsecond)
+    date2=date1
+    while date2.month != month+1:
+        date2=datetime(year=date2.year,month=date2.month,day=date2.day+7,hour=date2.hour,minute=date2.minute,second=date2.second,microsecond=date2.microsecond)
+    # date2=datetime(year=date2.year,month=date2.month,day=date2.day-7,hour=date2.hour,minute=date2.minute,second=date2.second,microsecond=date2.microsecond)
+    list=[]
+    i=0
+    while i<49:
+        i=i+1
+        objects= Halfhour.objects.filter(time=date1)
+        for o in objects:
+            dic={}
+            dic["time"]=o.time.time()
+            dic["count"]=o.count
+            dic["batch"]=o.batch
+            dic["device_id"]=o.device_id
+            list.append(dic)
+        date1 = date1 +relativedelta(minutes=30)
+    date1 = date1 + relativedelta(days=6)
+    while date1.day != date2.day:
+        i=0
+        while i<49:
+            i=i+1
+            objects= Halfhour.objects.filter(time=date1)
+            for o in objects:
+                status=0
+                for l in list:
+                    
+                    if l["time"]==o.time.time() and l["batch"]==o.batch and l["device_id"]==o.device_id:
+                        status=1
+                        l["count"]=l["count"]+o.count
+                if status=0:
+                    dic={}
+                    dic["time"]=o.time.time()
+                    dic["count"]=o.count
+                    dic["batch"]=o.batch
+                    dic["device_id"]=o.device_id
+                    list.append(dic)
+            date1 = date1 +relativedelta(minutes=30)
+        date1=date1 + relativedelta(days=6)
+    keys = ['time','device_id', 'batch', 'count']
+    # f = open('buildingwise.csv', 'wb')
+    # dict_writer = csv.DictWriter(f, keys)
+    # dict_writer.writer.writerow(keys)
+    # dict_writer.writerows(data["log entries"])
+
+    response1 = HttpResponse(content_type='text/csv')
+    response1['Content-Disposition'] = 'attachment; filename="halfhour_particularday.csv"'
+    dict_writer = csv.DictWriter(response1, keys)
+    dict_writer.writer.writerow(keys)
+    dict_writer.writerows(list)
+    # writer = csv.writer(response)
+    #    writer.writerow(['First row', 'Foo', 'Bar', 'Baz'])
+    #    writer.writerow(['Second row', 'A', 'B', 'C', '"Testing"', "Here's a quote"])
+    return response1
+
 def halfhour_single(request,param):
     # d contains the string for date in the specified format
     d=param
