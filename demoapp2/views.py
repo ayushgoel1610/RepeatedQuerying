@@ -354,7 +354,7 @@ def halfhour_single(request,param):
         dic["device_id"]=o.device_id
         dic["time"]=o.time
         list.append(dic)
-    keys = [ 'count', 'batch','device_id']
+    keys = [ 'time','count', 'batch','device_id']
     # f = open('buildingwise.csv', 'wb')
     # dict_writer = csv.DictWriter(f, keys)
     # dict_writer.writer.writerow(keys)
@@ -390,7 +390,7 @@ def halfhour_day(request,param):
             dic["device_id"]=o.device_id
             list.append(dic)
         d_iter = d_iter +relativedelta(minutes=30)
-    keys = ['device_id', 'batch', 'count']
+    keys = ['time','device_id', 'batch', 'count']
     # f = open('buildingwise.csv', 'wb')
     # dict_writer = csv.DictWriter(f, keys)
     # dict_writer.writer.writerow(keys)
@@ -422,7 +422,7 @@ def day_single(request,param):
         dic["batch"]=o.batch
         dic["device_id"]=o.device_id
         list.append(dic)
-    keys = ['device_id', 'batch', 'count']
+    keys = ['time','device_id', 'batch', 'count']
     # f = open('buildingwise.csv', 'wb')
     # dict_writer = csv.DictWriter(f, keys)
     # dict_writer.writer.writerow(keys)
@@ -458,7 +458,7 @@ def day_month(request,param):
             dic["device_id"]=o.device_id
             list.append(dic)
         d_iter=d_iter+relativedelta(days=1)
-    keys = ['device_id', 'batch', 'count']
+    keys = ['time','device_id', 'batch', 'count']
     # f = open('buildingwise.csv', 'wb')
     # dict_writer = csv.DictWriter(f, keys)
     # dict_writer.writer.writerow(keys)
@@ -493,7 +493,7 @@ def month_single(request,param):
         dic["batch"]=o.batch
         dic["device_id"]=o.device_id
         list.append(dic)
-    keys = ['device_id', 'batch', 'count']
+    keys = ['time','device_id', 'batch', 'count']
     # f = open('buildingwise.csv', 'wb')
     # dict_writer = csv.DictWriter(f, keys)
     # dict_writer.writer.writerow(keys)
@@ -536,7 +536,7 @@ def month_year(request,param):
         d_iter = d_iter +relativedelta(months=1)
         if(d_iter.month==3):
             d_iter = d_iter + relativedelta(days=1)
-    keys = ['device_id', 'batch', 'count']
+    keys = ['time','device_id', 'batch', 'count']
     # f = open('buildingwise.csv', 'wb')
     # dict_writer = csv.DictWriter(f, keys)
     # dict_writer.writer.writerow(keys)
