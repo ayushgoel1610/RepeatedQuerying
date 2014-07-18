@@ -355,16 +355,20 @@ def fetch_old():
 #     startofmonth
     
 def halfhour_particularday(request,day,month,year):
-    date=datetime(year=year,month=month,day=1)
+    date=datetime(year=int(year),month=int(month),day=1)
     date1=date-relativedelta(hours=5)
     list=[]
     # while date1.month != month+1:
     # objects= Halfhour.objects.filter(time=date1)
-    while date1.strftime("%A") is not day:
-        date1=datetime(year=date1.year,month=date1.month,day=date1.day+1,hour=date1.hour,minute=date1.minute,second=date1.second,microsecond=date1.microsecond)
+    while (date1+relativedelta(hours=5)).strftime("%A") != day:
+        #date1=datetime(year=date1.year,month=date1.month,day=date1.day+1,hour=date1.hour,minute=date1.minute,second=date1.second,microsecond=date1.microsecond)
+        date1=date1+relativedelta(days=1)
     date2=date1
-    while date2.month != month+1:
-        date2=datetime(year=date2.year,month=date2.month,day=date2.day+7,hour=date2.hour,minute=date2.minute,second=date2.second,microsecond=date2.microsecond)
+    count_of_weeks=0
+    while (date2+relativedelta(hours=5)).month != int(month)+1:
+        count_of_weeks=count_of_weeks+1
+        # date2=datetime(year=date2.year,month=date2.month,day=date2.day+7,hour=date2.hour,minute=date2.minute,second=date2.second,microsecond=date2.microsecond)
+        date2=date2+relativedelta(days=7)
     # date2=datetime(year=date2.year,month=date2.month,day=date2.day-7,hour=date2.hour,minute=date2.minute,second=date2.second,microsecond=date2.microsecond)
     list=[]
     i=0
@@ -392,7 +396,7 @@ def halfhour_particularday(request,day,month,year):
                     if l["time"]==o.time.time() and l["batch"]==o.batch and l["device_id"]==o.device_id:
                         status=1
                         l["count"]=l["count"]+o.count
-                if status=0:
+                if status==0:
                     dic={}
                     dic["time"]=o.time.time()
                     dic["count"]=o.count
@@ -406,7 +410,11 @@ def halfhour_particularday(request,day,month,year):
     # dict_writer = csv.DictWriter(f, keys)
     # dict_writer.writer.writerow(keys)
     # dict_writer.writerows(data["log entries"])
-
+    print "count:"
+    print count_of_weeks
+    print date2
+    for d in list:
+        d["count"]=d["count"]/(float(count_of_weeks))
     response1 = HttpResponse(content_type='text/csv')
     response1['Content-Disposition'] = 'attachment; filename="halfhour_particularday.csv"'
     dict_writer = csv.DictWriter(response1, keys)

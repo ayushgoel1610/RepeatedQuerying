@@ -21,6 +21,7 @@ urlpatterns = patterns('',
      url(r'^day_month/(?P<param>.+)$', day_month, name='day_month'),
      url(r'^month/(?P<param>.+)$', month_single, name='month_single'),
      url(r'^month_year/(?P<param>.+)$', month_year, name='month_year'),
+     url(r'^halfhour_particularday/(?P<day>.+)/(?P<month>.+)/(?P<year>.+)$', halfhour_particularday, name='halfhour_particularday'),
 
     # url(r'^demoapp2/', include('demoapp2.foo.urls')),
 
