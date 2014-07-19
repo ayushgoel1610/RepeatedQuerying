@@ -134,7 +134,7 @@ def countapi(request):
     json_data=htmlsrc
     data = json.loads(json_data)
     for i in range(0,len(data["counts"])):
-        d0=datetime.now()
+        # d0=datetime.now()
         d_half=d0-relativedelta(hours=-5,minutes=(d0.minute%30),seconds=d0.second,microseconds=d0.microsecond)
         halfhourlybasis_new = Halfhour(device_id=data["counts"][i]["device_id"],time=d_half, batch=data["counts"][i]["batch"], count=data["counts"][i]["count"])
         halfhourlybasis_new.save()
@@ -354,8 +354,8 @@ def fetch_old():
 #     date2=date2-relativedelta(months=month_diff2,hours=5)
 #     startofmonth
     
-def halfhour_particularday(request,day,month,year):
-    date=datetime(year=int(year),month=int(month),day=1)
+def halfhour_particularday(request,day,dt1,dt2):
+    date=datetime.strptime(dt1,"%Y-%m-%d")#(year=int(year),month=int(month),day=1)
     date1=date-relativedelta(hours=5)
     list=[]
     # while date1.month != month+1:
@@ -363,13 +363,17 @@ def halfhour_particularday(request,day,month,year):
     while (date1+relativedelta(hours=5)).strftime("%A") != day:
         #date1=datetime(year=date1.year,month=date1.month,day=date1.day+1,hour=date1.hour,minute=date1.minute,second=date1.second,microsecond=date1.microsecond)
         date1=date1+relativedelta(days=1)
+    datedt2=datetime.strptime(dt2,"%Y-%m-%d")
     date2=date1
+    date1_print=date1
     count_of_weeks=0
-    while (date2+relativedelta(hours=5)).month != int(month)+1:
+    while (date2.day<=datedt2.day and date2.month<=datedt2.month) or (date2.month<datedt2.month):#(date2+relativedelta(hours=5)).month != int(month)+1:
         count_of_weeks=count_of_weeks+1
         # date2=datetime(year=date2.year,month=date2.month,day=date2.day+7,hour=date2.hour,minute=date2.minute,second=date2.second,microsecond=date2.microsecond)
         date2=date2+relativedelta(days=7)
     # date2=datetime(year=date2.year,month=date2.month,day=date2.day-7,hour=date2.hour,minute=date2.minute,second=date2.second,microsecond=date2.microsecond)
+    # date2=date2-relativedelta(days=7)
+    date2_print=date2
     list=[]
     i=0
     while i<49:
@@ -384,7 +388,7 @@ def halfhour_particularday(request,day,month,year):
             list.append(dic)
         date1 = date1 +relativedelta(minutes=30)
     date1 = date1 + relativedelta(days=6)
-    while date1.day != date2.day:
+    while not (date1.day == date2.day and date1.month == date2.month):
         i=0
         while i<49:
             i=i+1
@@ -413,6 +417,9 @@ def halfhour_particularday(request,day,month,year):
     print "count:"
     print count_of_weeks
     print date2
+    print "print"
+    print date1_print
+    print date2_print
     for d in list:
         d["count"]=d["count"]/(float(count_of_weeks))
     response1 = HttpResponse(content_type='text/csv')
@@ -425,6 +432,198 @@ def halfhour_particularday(request,day,month,year):
     #    writer.writerow(['Second row', 'A', 'B', 'C', '"Testing"', "Here's a quote"])
     return response1
 
+
+def halfhour_any_month(request,dt1,dt2):
+    date=datetime.strptime(dt1,"%Y-%m-%d")#(year=int(year),month=int(month),day=1)
+    date1=date-relativedelta(hours=5)
+    list=[]
+    # date2=date+relativedelta(months=1)
+    # d_iter=date1
+    # while date1.month != month+1:
+    # objects= Halfhour.objects.filter(time=date1)
+    # while d_iter.month==d.month:
+
+    #     objects= Dailybasis.objects.filter(time=d_iter)
+
+    #     for o in objects:
+    #         dic={}
+    #         dic["time"]=o.day
+    #         dic["count"]=o.count
+    #         dic["batch"]=o.batch
+    #         dic["device_id"]=o.device_id
+    #         list.append(dic)
+    #     d_iter=d_iter+relativedelta(days=1)
+
+    # while (date1+relativedelta(hours=5)).strftime("%A") != day:
+    #     #date1=datetime(year=date1.year,month=date1.month,day=date1.day+1,hour=date1.hour,minute=date1.minute,second=date1.second,microsecond=date1.microsecond)
+    #     date1=date1+relativedelta(days=1)
+    datedt2=datetime.strptime(dt2,"%Y-%m-%d")
+    date2=date1
+    count_of_days=0
+    while (date2.day<=datedt2.day and date2.month<=datedt2.month) or (date2.month<datedt2.month):#(date2+relativedelta(hours=5)).month != int(date.month)+1:
+        count_of_days=count_of_days+1
+        # date2=datetime(year=date2.year,month=date2.month,day=date2.day+7,hour=date2.hour,minute=date2.minute,second=date2.second,microsecond=date2.microsecond)
+        date2=date2+relativedelta(days=1)
+    # date2=datetime(year=date2.year,month=date2.month,day=date2.day-7,hour=date2.hour,minute=date2.minute,second=date2.second,microsecond=date2.microsecond)
+    list=[]
+    i=0
+    while i<49:
+        i=i+1
+        objects= Halfhour.objects.filter(time=date1)
+        for o in objects:
+            dic={}
+            dic["time"]=o.time.time()
+            dic["count"]=o.count
+            dic["batch"]=o.batch
+            dic["device_id"]=o.device_id
+            list.append(dic)
+        date1 = date1 +relativedelta(minutes=30)
+    # date1 = date1 + relativedelta(days=6)
+    while not(date1.day == date2.day and date1.month == date2.month):
+        i=0
+        while i<49:
+            i=i+1
+            objects= Halfhour.objects.filter(time=date1)
+            for o in objects:
+                status=0
+                for l in list:
+                    
+                    if l["time"]==o.time.time() and l["batch"]==o.batch and l["device_id"]==o.device_id:
+                        status=1
+                        l["count"]=l["count"]+o.count
+                if status==0:
+                    dic={}
+                    dic["time"]=o.time.time()
+                    dic["count"]=o.count
+                    dic["batch"]=o.batch
+                    dic["device_id"]=o.device_id
+                    list.append(dic)
+            date1 = date1 +relativedelta(minutes=30)
+        # date1=date1 + relativedelta(days=6)
+    keys = ['time','device_id', 'batch', 'count']
+    # f = open('buildingwise.csv', 'wb')
+    # dict_writer = csv.DictWriter(f, keys)
+    # dict_writer.writer.writerow(keys)
+    # dict_writer.writerows(data["log entries"])
+    print "count:"
+    print count_of_days
+    print date2
+    for d in list:
+        d["count"]=d["count"]/(float(count_of_days))
+    response1 = HttpResponse(content_type='text/csv')
+    response1['Content-Disposition'] = 'attachment; filename="halfhour_any_month.csv"'
+    dict_writer = csv.DictWriter(response1, keys)
+    dict_writer.writer.writerow(keys)
+    dict_writer.writerows(list)
+    # writer = csv.writer(response)
+    #    writer.writerow(['First row', 'Foo', 'Bar', 'Baz'])
+    #    writer.writerow(['Second row', 'A', 'B', 'C', '"Testing"', "Here's a quote"])
+    return response1
+
+def halfhour_any_week(request,week,month,year,t11,t12):
+    date=datetime(year=int(year),month=int(month),day=1)
+    date1=date-relativedelta(hours=5)
+    list=[]
+    t1=datetime.strptime(t11,"%H:%M:%S")
+    t2=datetime.strptime(t12,"%H:%M:%S")
+    # date2=date+relativedelta(months=1)
+    # d_iter=date1
+    # while date1.month != month+1:
+    # objects= Halfhour.objects.filter(time=date1)
+    # while d_iter.month==d.month:
+
+    #     objects= Dailybasis.objects.filter(time=d_iter)
+
+    #     for o in objects:
+    #         dic={}
+    #         dic["time"]=o.day
+    #         dic["count"]=o.count
+    #         dic["batch"]=o.batch
+    #         dic["device_id"]=o.device_id
+    #         list.append(dic)
+    #     d_iter=d_iter+relativedelta(days=1)
+
+    while (date1+relativedelta(hours=5)).strftime("%A") != "Monday":
+        # print (date1+relativedelta(hours=5)).strftime("%A")
+        # print (date1+relativedelta(hours=5)).strftime("%A") != "Monday"
+        #date1=datetime(year=date1.year,month=date1.month,day=date1.day+1,hour=date1.hour,minute=date1.minute,second=date1.second,microsecond=date1.microsecond)
+        date1=date1+relativedelta(days=1)
+    print "hi"
+    week_no =1
+    while week_no<int(week) and date1.day<28:
+        week_no=week_no+1
+        date1=date1+relativedelta(days=7)
+    print "hi1"
+    date2=date1
+    count_of_days=0
+    date1_print=date1
+    while (date2+relativedelta(hours=5)).day != (date1+relativedelta(days=7)).day:
+        count_of_days=count_of_days+1
+        # date2=datetime(year=date2.year,month=date2.month,day=date2.day+7,hour=date2.hour,minute=date2.minute,second=date2.second,microsecond=date2.microsecond)
+        date2=date2+relativedelta(days=1)
+    # date2=datetime(year=date2.year,month=date2.month,day=date2.day-7,hour=date2.hour,minute=date2.minute,second=date2.second,microsecond=date2.microsecond)
+    print "hi2"
+    list=[]
+    i=0
+    no_of_half_hour=0
+    while i<49:
+        i=i+1
+        if (date1+relativedelta(hours=5)).time()>=t1.time() and (date1+relativedelta(hours=5)).time()<t2.time(): 
+            no_of_half_hour=no_of_half_hour+1
+            objects= Halfhour.objects.filter(time=date1)
+            for o in objects:
+                dic={}
+                dic["time"]=o.time.date()
+                dic["count"]=o.count
+                dic["batch"]=o.batch
+                dic["device_id"]=o.device_id
+                list.append(dic)
+        date1 = date1 +relativedelta(minutes=30)
+    print "hi3"
+    # date1 = date1 + relativedelta(days=6)
+    while date1.day != date2.day:
+        i=0
+        while i<49:
+            i=i+1
+            if (date1+relativedelta(hours=5)).time()>=t1.time() and (date1+relativedelta(hours=5)).time()<t2.time():
+                objects= Halfhour.objects.filter(time=date1)
+                for o in objects:
+                    status=0
+                    for l in list:
+                        
+                        if l["time"]==o.time.date() and l["batch"]==o.batch and l["device_id"]==o.device_id:
+                            status=1
+                            l["count"]=l["count"]+o.count
+                    if status==0:
+                        dic={}
+                        dic["time"]=o.time.date()
+                        dic["count"]=o.count
+                        dic["batch"]=o.batch
+                        dic["device_id"]=o.device_id
+                        list.append(dic)
+            date1 = date1 +relativedelta(minutes=30)
+        # date1=date1 + relativedelta(days=6)
+    print "hi4"
+    keys = ['time','device_id', 'batch', 'count']
+    # f = open('buildingwise.csv', 'wb')
+    # dict_writer = csv.DictWriter(f, keys)
+    # dict_writer.writer.writerow(keys)
+    # dict_writer.writerows(data["log entries"])
+    print "count:"
+    print count_of_days
+    print date2
+    print date1_print
+    for d in list:
+        d["count"]=d["count"]/(float(no_of_half_hour))
+    response1 = HttpResponse(content_type='text/csv')
+    response1['Content-Disposition'] = 'attachment; filename="halfhour_any_week.csv"'
+    dict_writer = csv.DictWriter(response1, keys)
+    dict_writer.writer.writerow(keys)
+    dict_writer.writerows(list)
+    # writer = csv.writer(response)
+    #    writer.writerow(['First row', 'Foo', 'Bar', 'Baz'])
+    #    writer.writerow(['Second row', 'A', 'B', 'C', '"Testing"', "Here's a quote"])
+    return response1
 def halfhour_single(request,param):
     # d contains the string for date in the specified format
     d=param
@@ -459,8 +658,8 @@ def halfhour_day(request,param):
     # d1 contains the string for date in the specified format
     d1=param
     d=datetime.strptime(d1,"%Y-%m-%d %H:%M:%S")
-    time1=d-relativedelta(hours=d.hour,minutes=d.minute,seconds=d.second,microseconds=d.microsecond)
-    nextdaytime=d-relativedelta(days=-1,hours=d.hour,minutes=d.minute,seconds=d.second,microseconds=d.microsecond)
+    time1=d-relativedelta(hours=d.hour+5,minutes=d.minute,seconds=d.second,microseconds=d.microsecond)
+    nextdaytime=d-relativedelta(days=-1,hours=d.hour+5,minutes=d.minute,seconds=d.second,microseconds=d.microsecond)
     d_iter=time1
     list=[]
     while d_iter.day == d.day:
@@ -496,7 +695,7 @@ def day_single(request,param):
     d1=param
     d=datetime.strptime(d1,"%Y-%m-%d %H:%M:%S")
     time1=d-relativedelta(hours=5+d.hour,minutes=d.minute,seconds=d.second,microseconds=d.microsecond)
-    nextdaytime=d-relativedelta(days=-1,hours=d.hour,minutes=d.minute,seconds=d.second,microseconds=d.microsecond)
+    nextdaytime=d-relativedelta(days=-1,hours=5+d.hour,minutes=d.minute,seconds=d.second,microseconds=d.microsecond)
     objects= Dailybasis.objects.filter(day=time1)
     list=[]
     for o in objects:
@@ -527,7 +726,7 @@ def day_month(request,param):
     d1=param
     d=datetime.strptime(d1,"%Y-%m-%d %H:%M:%S")
     time1=d-relativedelta(hours=5+d.hour,minutes=d.minute,seconds=d.second,microseconds=d.microsecond)
-    nextdaytime=d-relativedelta(days=-1,hours=d.hour,minutes=d.minute,seconds=d.second,microseconds=d.microsecond)
+    nextdaytime=d-relativedelta(days=-1,hours=5+d.hour,minutes=d.minute,seconds=d.second,microseconds=d.microsecond)
     d_iter=time1
     list=[]
     while d_iter.month==d.month:
