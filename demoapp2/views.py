@@ -467,6 +467,8 @@ def halfhour_any_month(request,dt1,dt2):
         count_of_days=count_of_days+1
         # date2=datetime(year=date2.year,month=date2.month,day=date2.day+7,hour=date2.hour,minute=date2.minute,second=date2.second,microsecond=date2.microsecond)
         date2=date2+relativedelta(days=1)
+    # date2=date2-relativedelta(days=1)
+    count_of_days=count_of_days-1
     # date2=datetime(year=date2.year,month=date2.month,day=date2.day-7,hour=date2.hour,minute=date2.minute,second=date2.second,microsecond=date2.microsecond)
     list=[]
     i=0
@@ -799,7 +801,9 @@ def day_custom(request,d1,d2):
     # dict_writer.writer.writerow(keys)
     # dict_writer.writerows(data["log entries"])
     for d in list:
-        d["count"]=d["count"]/(float(count_dict[d["time"]]))
+        if count_dict.get(d["time"])!=None:
+            d["count"]=d["count"]/(float(count_dict[d["time"]]))
+
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="day_custom.csv"'
     dict_writer = csv.DictWriter(response, keys)
