@@ -757,6 +757,57 @@ def day_month(request,param):
     #    writer.writerow(['Second row', 'A', 'B', 'C', '"Testing"', "Here's a quote"])
     return response
 
+def day_custom(request,d1,d2):
+    # d1 contains the string for date in the specified format
+    
+    d=datetime.strptime(d1,"%Y-%m-%d")
+    time1=d-relativedelta(hours=5)
+    d_end=datetime.strptime(d2,"%Y-%m-%d")
+    end_date=d_end-relativedelta(hours=5)
+    d_iter=time1
+    count_dict={}
+    list=[]
+    while (d_iter.day<=end_date.day and d_iter.month<=end_date.month) or (d_iter.month<end_date.month):
+
+        objects= Dailybasis.objects.filter(day=d_iter)
+        if count_dict.get(d_iter.strftime("%A")) != None:
+            count_dict[d_iter.strftime("%A")]=count_dict[d_iter.strftime("%A")]+1
+        else:
+            count_dict[d_iter.strftime("%A")]=1
+        for o in objects:
+            status=0
+            for l in list:
+                
+                if l["time"]==o.day.strftime("%A") and l["batch"]==o.batch and l["device_id"]==o.device_id:
+                    status=1
+                    l["count"]=l["count"]+o.count
+            if status==0:
+                dic={}
+                dic["time"]=o.day.strftime("%A")
+                dic["count"]=o.count
+                dic["batch"]=o.batch
+                dic["device_id"]=o.device_id
+                list.append(dic)
+        d_iter=d_iter+relativedelta(days=1)
+
+    keys = ['time','device_id', 'batch', 'count']
+    # f = open('buildingwise.csv', 'wb')
+    # dict_writer = csv.DictWriter(f, keys)
+    # dict_writer.writer.writerow(keys)
+    # dict_writer.writerows(data["log entries"])
+    for d in list:
+        d["count"]=d["count"]/(float(count_dict[d["time"]]))
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="day_custom.csv"'
+    dict_writer = csv.DictWriter(response, keys)
+    dict_writer.writer.writerow(keys)
+    dict_writer.writerows(list)
+    # writer = csv.writer(response)
+    #    writer.writerow(['First row', 'Foo', 'Bar', 'Baz'])
+    #    writer.writerow(['Second row', 'A', 'B', 'C', '"Testing"', "Here's a quote"])
+    return response
+
+
 
 def month_single(request,param):
     # d1 contains the string for date in the specified format

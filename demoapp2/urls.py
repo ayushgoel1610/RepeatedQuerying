@@ -24,7 +24,7 @@ urlpatterns = patterns('',
      url(r'^halfhour_particularday/(?P<day>.+)/(?P<dt1>.+)/(?P<dt2>.+)$', halfhour_particularday, name='halfhour_particularday'),
      url(r'^halfhour_any_month/(?P<month>.+)/(?P<year>.+)$', halfhour_any_month, name='halfhour_any_month'),
      url(r'^halfhour_any_week/(?P<week>.+)/(?P<month>.+)/(?P<year>.+)/(?P<t11>.+)/(?P<t12>.+)$', halfhour_any_week, name='halfhour_any_week'),
-
+     url(r'^day_custom/(?P<d1>.+)/(?P<d2>.+)$', day_custom, name='day_custom'),
     # url(r'^demoapp2/', include('demoapp2.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
