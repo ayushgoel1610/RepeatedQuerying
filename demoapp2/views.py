@@ -218,9 +218,9 @@ def countapi(request):
             yearlybasis_new.save()
     return render(request, 'demoapp2/count.html',{'htmlsrc': htmlsrc})
 
-starttime="2014-02-15 23:00:00"
-def countapi_old():
-    global starttime
+# starttime=datetime.now()
+def countapi_old(starttime):
+    # global starttime
     d=datetime.now()-timedelta(minutes=30)
     d0=starttime
     # d_half=d0-relativedelta(hours=-5,minutes=(d0.minute%30),seconds=d0.second,microseconds=d0.microsecond)
@@ -232,7 +232,7 @@ def countapi_old():
     url = url+fromtime+"&to="
     url = url+totime+"&format=yyyy-mm-dd-hh24:mi:ss&token=98a4bafbb35b3527c524ac5d73e9ff8e5e56c6caed488b259682feb7d0a1d192"
     # response = urllib2.urlopen(url)
-    starttime=totime
+    # starttime=totime
     print url
     # htmlsrc = response.read()
 
@@ -250,7 +250,7 @@ def countapi_old():
     json_data=htmlsrc
     data = json.loads(json_data)
     for i in range(0,len(data["counts"])):
-        d0=datetime.now()
+        # d0=datetime.now()
         d_half=d0-relativedelta(hours=-5,minutes=(d0.minute%30),seconds=d0.second,microseconds=d0.microsecond)
         halfhourlybasis_new = Halfhour(device_id=data["counts"][i]["device_id"],time=d_half, batch=data["counts"][i]["batch"], count=data["counts"][i]["count"])
         halfhourlybasis_new.save()
@@ -333,13 +333,16 @@ def countapi_old():
             yearlybasis_new = Yearlybasis(device_id=data["counts"][i]["device_id"],year=d4, batch=data["counts"][i]["batch"], count=data["counts"][i]["count"])
             yearlybasis_new.save()
 
-    return render(request, 'demoapp2/count.html',{'htmlsrc': htmlsrc})
+    # return render(request, 'demoapp2/count.html',{'htmlsrc': htmlsrc})
 
 
-def fetch_old():
+def fetch_old(request,dt1,dt2):
     global starttime
-    while starttime<datetime.now():
-        countapi_old()
+    starttime=datetime.strptime(dt1,"%Y-%m-%d %H:%M:%S")
+    endtime=datetime.strptime(dt2,"%Y-%m-%d %H:%M:%S")
+    while starttime<endtime:
+        countapi_old(starttime)
+        starttime=starttime+relativedelta(minutes=30)
 
 # def halfhour_particularday(request,time1,time2,month):
 #     d1=time1

@@ -21,10 +21,11 @@ urlpatterns = patterns('',
      url(r'^day_month/(?P<param>.+)$', day_month, name='day_month'),
      url(r'^month/(?P<param>.+)$', month_single, name='month_single'),
      url(r'^month_year/(?P<param>.+)$', month_year, name='month_year'),
+     url(r'^halfhour/any/(?P<dt1>.+)/(?P<dt2>.+)$', halfhour_any_month, name='halfhour_any_month'),
      url(r'^halfhour/(?P<day>.+)/(?P<dt1>.+)/(?P<dt2>.+)$', halfhour_particularday, name='halfhour_particularday'),
-     url(r'^halfhour_any_month/(?P<month>.+)/(?P<year>.+)$', halfhour_any_month, name='halfhour_any_month'),
      url(r'^halfhour_any_week/(?P<week>.+)/(?P<month>.+)/(?P<year>.+)/(?P<t11>.+)/(?P<t12>.+)$', halfhour_any_week, name='halfhour_any_week'),
      url(r'^day/(?P<d1>.+)/(?P<d2>.+)$', day_custom, name='day_custom'),
+     url(r'^fetch_old/(?P<dt1>.+)/(?P<dt2>.+)$', fetch_old, name='fetch_old'),
     # url(r'^demoapp2/', include('demoapp2.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
