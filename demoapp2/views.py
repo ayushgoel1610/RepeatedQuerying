@@ -271,10 +271,10 @@ def countapi_old(starttime):
                 # dailybasis_last_obj = dailybasis_last[0]
                 count1=dailybasis_last.count
                 dailybasis_last.count=count1+long(data["counts"][i]["count"])
-                if dailybasis_last.save(update_fields=["count"]):
-                    print "true!"
-                else:
-                    print "false!"
+ #               if dailybasis_last.save(update_fields=["count"]):
+  #                  print "true!"
+   #             else:
+    #                print "false!"
                 # dailybasis_last_obj.count = dailybasis_last_obj.count + long(data["counts"][i]["count"])
                 # if dailybasis_last_obj.save()
                 # 	print "true"
@@ -301,7 +301,7 @@ def countapi_old(starttime):
         # 	weeklybasis_new = Weeklybasis(device_id=data["counts"][i]["device_id"],week=d, batch=data["counts"][i]["batch"], count=data["counts"][i]["count"])
         # 	weeklybasis_new.save()
         d3=d_half-relativedelta(days=d_half.day,hours=d_half.hour+5,minutes=d_half.minute,seconds=d_half.second,microseconds=d_half.microsecond)
-        print d3
+#        print d3
         try:
             monthlybasis_last = Monthlybasis.objects.get(device_id=data["counts"][i]["device_id"],batch=data["counts"][i]["batch"],month=d3)
         # print monthlybasis_last
@@ -523,6 +523,7 @@ def halfhour_any_month(request,dt1,dt2):
     # writer = csv.writer(response)
     #    writer.writerow(['First row', 'Foo', 'Bar', 'Baz'])
     #    writer.writerow(['Second row', 'A', 'B', 'C', '"Testing"', "Here's a quote"])
+    print "file is being sent"
     return response1
 
 def halfhour_any_week(request,week,month,year,t11,t12):
