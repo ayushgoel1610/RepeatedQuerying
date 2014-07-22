@@ -108,9 +108,13 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
+
 #XS_SHARING_ALLOWED_CREDENTIALS = 'True'
 #XS_SHARING_ALLOWED_ORIGINS = '*'
 #XS_SHARING_ALLOWED_METHODS = ['POST','GET','OPTIONS', 'PUT', 'DELETE']
+# XS_SHARING_ALLOWED_CREDENTIALS = 'True'
+XS_SHARING_ALLOWED_ORIGINS = '*'
+XS_SHARING_ALLOWED_METHODS = ['POST','GET','OPTIONS', 'PUT', 'DELETE']
 ROOT_URLCONF = 'demoapp2.urls'
 CORSS_ORIGIN_ALLOW_ALL = True
 # Python dotted path to the WSGI application used by Django's runserver.
