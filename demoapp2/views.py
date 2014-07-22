@@ -425,8 +425,8 @@ def halfhour_particularday(request,day,dt1,dt2):
     print date2_print
     for d in list:
         d["count"]=d["count"]/(float(count_of_weeks))
-    response1 = HttpResponse(content_type='text/csv')
-    response1['Content-Disposition'] = 'attachment; filename="halfhour_particularday.csv"'
+    response1 = HttpResponse(content_type='text')
+    # response1['Content-Disposition'] = 'attachment; filename="halfhour_particularday.csv"'
     dict_writer = csv.DictWriter(response1, keys)
     dict_writer.writer.writerow(keys)
     dict_writer.writerows(list)
