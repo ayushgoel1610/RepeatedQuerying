@@ -26,6 +26,7 @@ urlpatterns = patterns('',
      url(r'^halfhour_any_week/(?P<week>.+)/(?P<month>.+)/(?P<year>.+)/(?P<t11>.+)/(?P<t12>.+)$', halfhour_any_week, name='halfhour_any_week'),
      url(r'^day/(?P<d1>.+)/(?P<d2>.+)$', day_custom, name='day_custom'),
      url(r'^fetch_old/(?P<dt1>.+)/(?P<dt2>.+)$', fetch_old, name='fetch_old'),
+     url(r'^ubicomp$', ubicomp,name='ubicomp'),
     # url(r'^demoapp2/', include('demoapp2.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:

@@ -982,3 +982,6 @@ def samplewebsite(request):
 
 def tabledata(request):
     return render(request, 'demoapp2/table_data.html')
+
+def ubicomp(request):
+	return render(request, 'demoapp2/Ubicomp.html')

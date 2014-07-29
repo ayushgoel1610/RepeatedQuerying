@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<head>
+  <!-- //jquery, AJAX -->
+  <meta http-equiv="content-type" content="text/html; charset=UTF8">
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script> -->
+  <!-- //crossfilter, d3, dc -->
+  <script type="text/javascript" src="../../static/newapp/js/crossfilter.js"></script>
+  <script type="text/javascript" src="../../static/newapp/js/d3.js"></script>
+  <script type="text/javascript" src="../../static/newapp/js/dc.js"></script>
+  <!-- //stylesheets -->
+  <link rel="stylesheet" type="text/css" href="../../static/newapp/css/dc.css" media="screen" />
+  <link rel="stylesheet" type="text/css" href="../../static/newapp/css/website.css">
+
+  <title>Ubicomp</title>
+</head>
+
+<body>
+  <header>
+    <img src="../../static/newapp/img/iiitd-logo.jpg">
+    <h1>Ubicomp</h1> 
+     <ul>
+      <li><a href="#">Home</a></li>
+     </ul>
+  </header>
+  <!-- <div> -->
+    <!-- form -->
+    <!-- <div class="container"> -->
+      <form name="ajaxform">
+        <!-- dropdown menu to select scale-->
+        <p id="scale">
+          Choose X-axis Scale: 
+          <select id="ChooseScale">
+            <option value="">Select</option>
+            <option value="H">By Every Half Hour in Day</option>
+            <option value="D">By Day of Week</option>
+          </select>
+          <div id="ChooseDaydiv">Data by specific day of the week: 
+            <select id="ChooseDay">
+              <option value="A">any</option>
+              <option value="M">Monday</option>
+              <option value="T">Tuesday</option>
+              <option value="W">Wednesday</option>
+              <option value="Th">Thursday</option>
+              <option value="F">Friday</option>
+              <option value="Sa">Saturday</option>
+              <option value="Su">Sunday</option>
+            </select>
+            <br />
+          </div>
+          <!-- selecting duration -->            
+          <!-- <div id="From"> -->
+            Date: 
+          <!-- </div> -->
+          <!-- <div> -->
+            <input type="date" name="date1">
+          <!-- </div>             -->
+          <!-- <div id="To"> -->
+            Till: 
+          <!-- </div> -->
+          <!-- <div> -->
+            <input type="date" name="date2">
+          <!-- </div>         -->
+        </p> 
+        <!-- dropdown menu to select AP location-->
+        <p id="location">
+          Choose location: 
+          <select id="Building">
+            <option value="">Select</option>
+            <option value="Acad">Academic Block</option>
+            <option value="Lib">Library and Information Centre</option>
+            <option value="SAC">Students Activity Centre</option>
+            <option value="GH">Girls Hostel</option>
+            <option value="BH">Boys Hostel</option>
+          </select>
+        
+          <select class="floor" id="Acad">
+            <option value="">Select</option>
+            <option value="F0">Ground Floor</option>
+            <option value="F1">First Floor</option>
+            <option value="F2">Second Floor</option>
+            <option value="F3">Third Floor</option>
+            <option value="F4">Fourth Floor</option>
+            <option value="F5">Fifth Floor</option>
+          </select>
+          <select class="floor" id="Lib">
+            <option value="">Select</option>
+            <option value="F0">Ground Floor</option>
+            <option value="F1">First Floor</option>
+            <option value="F2">Second Floor</option>
+            <option value="F3">Third Floor</option>
+          </select>
+          <select class="floor" id="SAC">
+            <option value="">Select</option>
+            <option value="F0">Ground Floor</option>
+            <option value="F1">First Floor</option>
+            <option value="F2">Second Floor</option>
+            <option value="F3">Third Floor</option>
+          </select>
+          <select class="floor" id="GH">
+            <option value="">Select</option>
+            <option value="F0">Ground Floor</option>
+            <option value="F1">First Floor</option>
+            <option value="F2">Second Floor</option>
+            <option value="F3">Third Floor</option>
+            <option value="F4">Fourth Floor</option>
+          </select>
+          <select class="floor" id="BH">
+            <option value="">Select</option>
+            <option value="F0">Ground Floor</option>
+            <option value="F1">First Floor</option>
+            <option value="F2">Second Floor</option>
+            <option value="F3">Third Floor</option>
+            <option value="F4">Fourth Floor</option>
+            <option value="F5">Fifth Floor</option>
+          </select>     
+        
+          <select class="wing" id="AcadWings">
+            <option value="">Select</option>
+            <option value="WA">Wing A</option>
+            <option value="WB">Wing B</option>
+          </select>
+          <select class="wing" id="AcadandHostelWings">
+            <option value="">Select</option>
+            <option value="WA">Wing A</option>
+            <option value="WB">Wing B</option>
+            <option value="WC">Wing C</option>
+          </select>
+          <!-- <select class="wing" id="AcadLabs">
+            <option value="">Select</option>
+            <option value="L1">Lab1</option>
+            <option value="L2">Lab2</option>
+          </select>
+          <select class="wing" id="Classrooms">
+            <option value="">Select</option> 
+            <option value="C1">CR1</option>
+            <option value="C2">CR2</option>
+            <option value="C3">CR3</option>
+          </select>
+          <select class="wing" id="LibLabs"> 
+            <option value="">Select</option>
+            <option value="L1">Lab1</option>
+            <option value="L2">Lab2</option>
+            <option value="L3">Lab3</option>
+          </select> -->
+        </p>        
+        <br />
+        <button type="button" onclick="makeCorsRequest()">Submit</button>
+      </form>
+    <!-- </div> -->
+    <!-- charts -->
+    <div class="chart">
+      <!-- bar chart -->  
+      <!-- <div style="height:200px;width:1000px;margin:auto;float:center;"> -->
+        <div id="chart-bar-count" class="chart"></div>
+      <!-- </div> -->
+      <!-- ring charts -->
+      <!-- <div style="margin:auto;float:center;width:1000px;height:500px;"> -->
+        <div id="chart-ring-year" class="chart"></div>
+        <div id="chart-ring-batch" class="chart"></div>
+        <div id="chart-ring-AP" class="chart"></div> 
+      <!-- </div> -->
+    </div>
+  <!-- </div> -->
+  <script type="text/javascript" src="../../static/newapp/js/form.js"></script>
+  <script type="text/javascript" src="../../static/newapp/js/request.js"></script>
+  <script type="text/javascript" src="../../static/newapp/js/newcharts.js"></script>
+</body>
+</html>
