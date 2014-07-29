@@ -19,8 +19,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'demoapp2',                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
-        'USER': 'pulkit',
-        'PASSWORD': 'password',
+        'USER': 'root',
+        'PASSWORD': 'occupancy',
         'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
         'PORT': '',                      # Set to empty string for default.
     }
@@ -98,6 +98,7 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -107,11 +108,15 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
+
+#XS_SHARING_ALLOWED_CREDENTIALS = 'True'
+#XS_SHARING_ALLOWED_ORIGINS = '*'
+#XS_SHARING_ALLOWED_METHODS = ['POST','GET','OPTIONS', 'PUT', 'DELETE']
 # XS_SHARING_ALLOWED_CREDENTIALS = 'True'
 XS_SHARING_ALLOWED_ORIGINS = '*'
 XS_SHARING_ALLOWED_METHODS = ['POST','GET','OPTIONS', 'PUT', 'DELETE']
 ROOT_URLCONF = 'demoapp2.urls'
-
+CORSS_ORIGIN_ALLOW_ALL = True
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'demoapp2.wsgi.application'
 
@@ -134,6 +139,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'newapp',
+    'corsheaders',
 )
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
