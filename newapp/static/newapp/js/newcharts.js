@@ -96,11 +96,6 @@ function charts(url,timeformat){
       .xAxisPadding(1)
       .xAxis().tickFormat();
 
-    YearRingChart
-        .width(300).height(300)
-        .dimension(yearDim)
-        .group(year_total)
-        .innerRadius(50);
 
     BatchRingChart
         .width(300).height(300)
@@ -108,6 +103,12 @@ function charts(url,timeformat){
         .group(batch_total)
         .innerRadius(50);
 
+    YearRingChart
+        .width(300).height(300)
+        .dimension(yearDim)
+        .group(year_total)
+        .innerRadius(50);
+    
     APNameRingChart
         .width(300).height(300)
         .dimension(locDim)

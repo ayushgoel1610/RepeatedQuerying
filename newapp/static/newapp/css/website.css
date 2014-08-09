@@ -46,25 +46,13 @@ button {
   font-size: 22px;
   padding: 5px;
 }
-/*div.container{
-  float: center;
-  display: block;
-  margin: auto;
-  width: 500px;
-  height: 100px;
-  text-align: center;
-}*/
-/*div.chart {
-  position: absolute;
-  left: 50%;
-  margin-left: -100px;
-}*/
-/*div.container2{
-  margin-top: 200px;
-  height:100%;
-  width:100%;
-  top:800px;
-}*/
+
+div.chart {
+ float: center;
+ display: inline-block;
+ padding: 20px;
+}
+
 div {
   float: center;
 }

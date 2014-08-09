@@ -1,4 +1,4 @@
-function compute_url(obj) {
+function compute_url() {
   var str = "http://127.0.0.1:8000/";
   var temp = $("#ChooseScale").val();
   if(temp == "H"){
@@ -22,9 +22,10 @@ function compute_url(obj) {
     alert("Please choose a duration!");
     return;
   }
+  charts(str,temp);
   //alert(str);
-  obj.format = temp;
-  return str;
+  //obj.format = temp;
+  //return str;
   /*
   //computing AP label
   var APlabel;
